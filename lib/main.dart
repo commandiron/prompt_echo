@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
       builder: (context, currentMode, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme:  MyTheme.lightTheme,
+          theme: MyTheme.lightTheme,
           darkTheme: MyTheme.darkTheme,
           themeMode: currentMode,
           title: "Prompt Echo - All in one ai prompt bar",
@@ -27,5 +27,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-
