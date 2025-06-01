@@ -29,6 +29,11 @@ class _LlmChipState extends State<LlmChip> {
         Tooltip(
           message: widget.llm.name,
           child: IconButton(
+            splashColor: Theme.of(context).colorScheme.onSurface.withAlpha(20),
+            hoverColor: Theme.of(context).colorScheme.onSurface.withAlpha(20),
+            highlightColor: Theme.of(
+              context,
+            ).colorScheme.onSurface.withAlpha(20),
             onPressed: () {
               setState(() {
                 isActive = !isActive;
@@ -38,9 +43,11 @@ class _LlmChipState extends State<LlmChip> {
             icon: Image.asset(
               widget.llm.asset,
               color:
-                  themeNotifier.value == ThemeMode.dark
-                      ? widget.llm.darkThemeColor
-                      : widget.llm.lightThemeColor,
+                  isActive
+                      ? themeNotifier.value == ThemeMode.dark
+                          ? widget.llm.darkThemeColor
+                          : widget.llm.lightThemeColor
+                      : Theme.of(context).colorScheme.onSurface.withAlpha(100),
               height: 30,
               opacity: AlwaysStoppedAnimation(isActive ? 1.0 : 0.3),
             ),

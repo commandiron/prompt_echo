@@ -95,13 +95,32 @@ class Home extends StatelessWidget {
                     Text(
                       "developed by",
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withAlpha(100),
                       ),
                     ),
+                    SizedBox(width: 4,),
                     IconButton(
-                      onPressed: () => HtmlHelper.openURL("https://github.com/commandiron"),
-                      icon: Image.asset("assets/github.png", width: 16, color: Theme.of(context).colorScheme.onSurface,),
-                    )
+                      splashColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(20),
+                      hoverColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(20),
+                      highlightColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(20),
+                      onPressed:
+                          () => HtmlHelper.openURL(
+                            "https://github.com/commandiron",
+                          ),
+                      icon: Image.asset(
+                        "assets/github.png",
+                        width: 16,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
                   ],
                 ),
               ),
