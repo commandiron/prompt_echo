@@ -1,0 +1,8 @@
+body {
+    inset: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    background: #1F1F1F;
+}
