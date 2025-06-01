@@ -188,7 +188,7 @@ class AllowPopUpButton extends StatelessWidget {
   const AllowPopUpButton({super.key});
 
   Future<void> openNewTabForAllowPopUp() async {
-    await Future.delayed(Duration(milliseconds: 4200));
+    await Future.delayed(Duration(milliseconds: 5500));
     HtmlHelper.openURL(Uri.base.toString());
   }
 
@@ -201,16 +201,19 @@ class AllowPopUpButton extends StatelessWidget {
           context: context,
           builder:
               (context) => AlertDialog(
-                title: Text("Allow Popup"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
+                title: Row(
                   children: [
-                    Text(
-                      "After few seconds, you will see pop-up blocker next to the address bar. Please click on and allow.",
-                    ),
-                    CountDownText(),
+                    Text("Allow Popup"),
+                    SizedBox(width: 4,),
+                    CountDownText()
                   ],
                 ),
+                content: Text(
+                  "After few seconds, you will see pop-up blocker next to the address bar. Please click on and allow.",
+                ),
+                actions: [
+                  CloseButton()
+                ],
               ),
         );
       },
@@ -230,7 +233,7 @@ class CountDownText extends StatefulWidget {
 }
 
 class _CountDownTextState extends State<CountDownText> {
-  int countdown = 3;
+  int countdown = 5;
   late Timer _timer;
   void startCountdown() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -239,7 +242,6 @@ class _CountDownTextState extends State<CountDownText> {
           countdown--;
         });
       } else {
-        Navigator.of(context).pop();
         timer.cancel();
       }
     });
@@ -259,6 +261,6 @@ class _CountDownTextState extends State<CountDownText> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(countdown.toString());
+    return countdown > 0 ? Text(countdown.toString()) : SizedBox.shrink();
   }
 }
