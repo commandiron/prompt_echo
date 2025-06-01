@@ -53,7 +53,9 @@ class Home extends StatelessWidget {
                     style:
                         MediaQuery.of(context).size.width >
                                 compactModeBreakWidth
-                            ? Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14)
+                            ? Theme.of(
+                              context,
+                            ).textTheme.titleMedium?.copyWith(fontSize: 14)
                             : Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -78,7 +80,34 @@ class Home extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(children: [Spacer(), EchoSearch(), Spacer(flex: 2)]),
+        child: Column(
+          children: [
+            Spacer(),
+            EchoSearch(),
+            Expanded(
+              flex: 2,
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "developed by",
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => HtmlHelper.openURL("https://github.com/commandiron"),
+                      icon: Image.asset("assets/github.png", width: 16, color: Theme.of(context).colorScheme.onSurface,),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
