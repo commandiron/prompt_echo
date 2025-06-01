@@ -20,6 +20,7 @@ class MainApp extends StatelessWidget {
           theme:  MyTheme.lightTheme,
           darkTheme: MyTheme.darkTheme,
           themeMode: currentMode,
+          title: "Prompt Echo - All in one ai prompt bar",
           home: const Home(),
         );
       },
