@@ -33,9 +33,7 @@ class MyTheme {
       outline: outlineDark,
       secondary: secondaryDark,
     ),
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: onSurfaceDark,
-    ),
+    textSelectionTheme: TextSelectionThemeData(cursorColor: onSurfaceDark),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: onSurfaceDark,
@@ -54,7 +52,9 @@ class MyTheme {
     ),
     iconTheme: const IconThemeData(color: primaryDark),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+      fillColor: WidgetStateProperty.resolveWith<Color>((
+        Set<WidgetState> states,
+      ) {
         if (states.contains(WidgetState.selected)) {
           return onSurfaceDark;
         }
@@ -77,17 +77,21 @@ class MyTheme {
       outline: outlineLight,
       secondary: secondaryLight,
     ),
-    textSelectionTheme: TextSelectionThemeData(
-      cursorColor: onSurfaceLight,
-    ),
+    textSelectionTheme: TextSelectionThemeData(cursorColor: onSurfaceLight),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: onSurfaceLight,
       foregroundColor: surfaceLight,
       extendedTextStyle: TextStyle(fontWeight: FontWeight.bold),
+      extendedSizeConstraints: BoxConstraints(minHeight: 47),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
     ),
     iconTheme: const IconThemeData(color: primaryLight),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+      fillColor: WidgetStateProperty.resolveWith<Color>((
+        Set<WidgetState> states,
+      ) {
         if (states.contains(WidgetState.selected)) {
           return onSurfaceLight;
         }
