@@ -1,13 +1,13 @@
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:prompt_echo/home/prompt_bar/widget/copy_to_clipboard_checkbox.dart';
+import 'package:prompt_echo/home/widget/prompt_bar/widget/copy_to_clipboard_checkbox.dart';
 import 'package:prompt_echo/util/constants.dart';
 import 'package:prompt_echo/data/llm.dart';
-import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
-import 'package:prompt_echo/home/prompt_bar/widget/llm_chip.dart';
+import 'package:prompt_echo/home/widget/prompt_bar/widget/echo_button.dart';
+import 'package:prompt_echo/home/widget/prompt_bar/widget/llm_chip.dart';
 import 'package:prompt_echo/util/html_helper.dart';
-import 'package:prompt_echo/util/responsive_horizontal_row.dart';
+import 'package:prompt_echo/widget/responsive_horizontal_row.dart';
 
 class PromptBar extends StatefulWidget {
   const PromptBar({super.key});

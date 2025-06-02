@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prompt_echo/util/my_theme.dart';
 
-import '../../../data/llm.dart';
+import '../../../../data/llm.dart';
 
 class LlmChip extends StatefulWidget {
   const LlmChip({super.key, required this.llm, required this.onPressed});

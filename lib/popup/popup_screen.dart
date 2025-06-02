@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/home/custom_app_bar.dart';
-import 'package:prompt_echo/home/footer.dart' show Footer;
+import 'package:prompt_echo/widget/custom_app_bar.dart';
+import 'package:prompt_echo/home/widget/footer.dart' show Footer;
 import 'package:universal_html/html.dart';
 
 class PopupScreen extends StatefulWidget {

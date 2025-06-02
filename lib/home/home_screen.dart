@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/blinking_widget.dart';
-import 'package:prompt_echo/home/custom_app_bar.dart';
-import 'package:prompt_echo/home/footer.dart';
-import 'package:prompt_echo/home/popup_button.dart';
-import 'package:prompt_echo/home/prompt_bar/prompt_bar.dart';
+import 'package:prompt_echo/widget/blinking_widget.dart';
+import 'package:prompt_echo/widget/custom_app_bar.dart';
+import 'package:prompt_echo/home/widget/footer.dart';
+import 'package:prompt_echo/home/widget/popup_button.dart';
+import 'package:prompt_echo/home/widget/prompt_bar/prompt_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
