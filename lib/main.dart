@@ -1,9 +1,12 @@
+import 'package:dynamic_path_url_strategy/dynamic_path_url_strategy.dart';
 import 'package:flutter/material.dart';
+import 'package:prompt_echo/home/custom_app_bar.dart';
 import 'package:prompt_echo/home/home_screen.dart';
 
 import 'util/my_theme.dart';
 
 void main() {
+  setPathUrlStrategy();
   runApp(const MainApp());
 }
 
@@ -21,7 +24,19 @@ class MainApp extends StatelessWidget {
           darkTheme: MyTheme.darkTheme,
           themeMode: currentMode,
           title: "Prompt Echo - All in one ai prompt bar",
-          home: const HomeScreen(),
+          routes: {
+            "/": (context) => const HomeScreen(),
+            "/popup":
+                (context) => Scaffold(
+                  appBar: CustomAppBar(),
+                  body: Center(
+                    child: Text(
+                      "Popup permission successful. Please close this window.",
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                  ),
+                ),
+          },
         );
       },
     );

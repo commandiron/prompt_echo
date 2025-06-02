@@ -154,7 +154,7 @@ class AllowPopUpButton extends StatelessWidget {
 
   Future<void> openNewTabForAllowPopUp() async {
     await Future.delayed(Duration(milliseconds: 5500));
-    HtmlHelper.openURL(Uri.base.toString());
+    HtmlHelper.openURL("${Uri.base}popup");
   }
 
   @override

@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dynamic_path_url_strategy: ^1.0.0
   universal_html: ^2.2.1
   flextras: ^1.0.0
 

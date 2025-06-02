@@ -12,6 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final isCompact = MediaQuery.of(context).size.width < compactModeBreakWidth;
 
     return AppBar(
+      automaticallyImplyLeading: false,
       centerTitle: true,
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
