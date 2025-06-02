@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +8,6 @@ import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/llm_chip.dart';
 import 'package:prompt_echo/util/html_helper.dart';
 import 'package:prompt_echo/util/responsive_horizontal_row.dart';
-import 'package:universal_html/html.dart';
 
 class PromptBar extends StatefulWidget {
   const PromptBar({super.key});
@@ -20,9 +17,6 @@ class PromptBar extends StatefulWidget {
 }
 
 class _PromptBarState extends State<PromptBar> {
-  bool _isPopupTriedBefore = false;
-  bool _popupAllowed = false;
-
   final Set<Llm> llmSet = Set.from(
     Llm.items.where((e) => e.echoStatus != EchoStatus.needCopyPaste),
   );
@@ -103,47 +97,15 @@ class _PromptBarState extends State<PromptBar> {
             ),
             trailingWidget:
                 MediaQuery.of(context).size.width > compactModeBreakWidth
-                    ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(width: 8),
-                        EchoButton(onPressed: () => search()),
-                        SizedBox(width: 8),
-                        if (!_popupAllowed)
-                          AllowPopUpButton(
-                            isPopupTriedBefore: _isPopupTriedBefore,
-                            popupTried: () {
-                              setState(() {
-                                _isPopupTriedBefore = true;
-                              });
-                            },
-                            popupOpenedSuccessfully: () {
-                              setState(() {
-                                _popupAllowed = true;
-                              });
-                            },
-                          ),
-                      ],
+                    ? Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: EchoButton(onPressed: () => search()),
                     )
                     : null,
           ),
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
             EchoButton(onPressed: () => search()),
-          if (MediaQuery.of(context).size.width < compactModeBreakWidth &&
-              !_popupAllowed)
-            AllowPopUpButton(
-              isPopupTriedBefore: _isPopupTriedBefore,
-              popupTried: () {
-                setState(() {
-                  _isPopupTriedBefore = true;
-                });
-              },
-              popupOpenedSuccessfully: () {
-                setState(() {
-                  _popupAllowed = true;
-                });
-              },
-            ),
           ResponsiveAppRow(
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,118 +132,6 @@ class _PromptBarState extends State<PromptBar> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class AllowPopUpButton extends StatefulWidget {
-  const AllowPopUpButton({
-    super.key,
-    required this.isPopupTriedBefore,
-    required this.popupTried,
-    required this.popupOpenedSuccessfully,
-  });
-
-  final bool isPopupTriedBefore;
-  final void Function() popupTried;
-  final void Function() popupOpenedSuccessfully;
-
-  @override
-  State<AllowPopUpButton> createState() => _AllowPopUpButtonState();
-}
-
-class _AllowPopUpButtonState extends State<AllowPopUpButton> {
-  bool _isDialogOpen = false;
-  Future<void> openNewTabForAllowPopUp() async {
-    if (widget.isPopupTriedBefore) {
-      return;
-    }
-    await Future.delayed(Duration(milliseconds: 3000));
-    widget.popupTried();
-    HtmlHelper.openURL("${Uri.base}popup");
-    window.onMessage.listen((event) {
-      if (event.data == 'popup_opened_successfully') {
-        if (_isDialogOpen && mounted) {
-          Navigator.of(context).pop();
-        }
-        widget.popupOpenedSuccessfully();
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        openNewTabForAllowPopUp();
-        if (_isDialogOpen) return;
-        _isDialogOpen = true;
-        showDialog<bool>(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: Row(
-                  children: [Text("Allow Popup"), Spacer(), CloseButton()],
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "After a few seconds, you will see the popup blocker next to the address bar. Please click and allow.",
-                    ),
-                    SizedBox(height: 16),
-                    Image.asset("assets/allow_popup.png", width: 360),
-                  ],
-                ),
-              ),
-        ).then((_) {
-          _isDialogOpen = false;
-        });
-      },
-      child: Text("Allow Popup\nBefore Use!"),
-    );
-  }
-}
-
-class CountDownText extends StatefulWidget {
-  const CountDownText({super.key});
-
-  @override
-  State<CountDownText> createState() => _CountDownTextState();
-}
-
-class _CountDownTextState extends State<CountDownText> {
-  int countdown = 5;
-  late Timer _timer;
-  void startCountdown() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (countdown > 0) {
-        setState(() {
-          countdown--;
-        });
-      } else {
-        timer.cancel();
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    startCountdown();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      countdown.toString(),
-      style: Theme.of(context).textTheme.bodyLarge,
     );
   }
 }

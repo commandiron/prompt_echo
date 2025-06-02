@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prompt_echo/home/custom_app_bar.dart';
+import 'package:prompt_echo/home/footer.dart' show Footer;
 import 'package:universal_html/html.dart';
 
 class PopupScreen extends StatefulWidget {
@@ -12,9 +13,13 @@ class PopupScreen extends StatefulWidget {
 class _PopupScreenState extends State<PopupScreen> {
   @override
   void initState() {
-    window.opener?.postMessage('popup_opened_successfully', window.location.origin);
+    window.opener?.postMessage(
+      'popup_opened_successfully',
+      window.location.origin,
+    );
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +27,16 @@ class _PopupScreenState extends State<PopupScreen> {
       body: Container(
         padding: EdgeInsets.all(16),
         alignment: Alignment.center,
-        child: Text(
-          "Popup permission successful. Please close this window.",
-          style: Theme.of(context).textTheme.displaySmall,
-          textAlign: TextAlign.center,
+        child: Column(
+          children: [
+            Spacer(),
+            Text(
+              "Popup permission successful. Please close this window.",
+              style: Theme.of(context).textTheme.displaySmall,
+              textAlign: TextAlign.center,
+            ),
+            Expanded(flex: 2, child: Footer()),
+          ],
         ),
       ),
     );
