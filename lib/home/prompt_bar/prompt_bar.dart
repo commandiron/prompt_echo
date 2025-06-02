@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prompt_echo/home/prompt_bar/widget/copy_to_clipboard_checkbox.dart';
 import 'package:prompt_echo/util/constants.dart';
 import 'package:prompt_echo/data/llm.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
@@ -98,11 +99,21 @@ class _PromptBarState extends State<PromptBar> {
             ),
             trailingWidget:
                 MediaQuery.of(context).size.width > compactModeBreakWidth
-                    ? _buildEchoButtonWithAllowPopupButton()
+                    ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(width: 8),
+                        EchoButton(onPressed: () => search()),
+                        SizedBox(width: 8),
+                        AllowPopUpButton(),
+                      ],
+                    )
                     : null,
           ),
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
-            _buildEchoButtonWithAllowPopupButton(),
+            EchoButton(onPressed: () => search()),
+          if (MediaQuery.of(context).size.width < compactModeBreakWidth)
+            AllowPopUpButton(),
           ResponsiveAppRow(
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,46 +147,6 @@ class _PromptBarState extends State<PromptBar> {
       ),
     );
   }
-
-  Widget _buildEchoButtonWithAllowPopupButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 8),
-                        EchoButton(onPressed: () => search()),
-                        SizedBox(width: 8),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text("Allow Popup"),
-                        ),
-                      ],
-                    );
-  }
-}
-
-class CopyToCliboardCheckBox extends StatelessWidget {
-  const CopyToCliboardCheckBox({
-    super.key,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final bool? value;
-  final void Function(bool? value)? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Checkbox(value: value, onChanged: onChanged),
-        Text(
-          "Copy to clipboard when press echo.",
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
-    );
-  }
 }
 
 class AllowPopUpButton extends StatelessWidget {
@@ -196,23 +167,27 @@ class AllowPopUpButton extends StatelessWidget {
           builder:
               (context) => AlertDialog(
                 title: Row(
+                  children: [Text("Allow Popup"), Spacer(), CloseButton()],
+                ),
+                content: Column(
                   children: [
-                    Text("Allow Popup"),
-                    SizedBox(width: 4),
-                    CountDownText(),
+                    Text(
+                      "After a few seconds, you will see the popup blocker next to the address bar. Please click and allow.",
+                    ),
+                    SizedBox(height: 16,),
+                    Row(
+                      children: [
+                        Expanded(child: Center(child: Text("Chrome"))),
+                        Expanded(child: Center(child: Text("Safari"))),
+                        Expanded(child: Center(child: Text("Firefox"))),
+                      ],
+                    )
                   ],
                 ),
-                content: Text(
-                  "After few seconds, you will see pop-up blocker next to the address bar. Please click on and allow.",
-                ),
-                actions: [CloseButton()],
               ),
         );
       },
-      child: Text(
-        "* Don't forget to allow pop-up before start.",
-        style: Theme.of(context).textTheme.bodySmall,
-      ),
+      child: Text("Allow Popup"),
     );
   }
 }
@@ -253,6 +228,9 @@ class _CountDownTextState extends State<CountDownText> {
 
   @override
   Widget build(BuildContext context) {
-    return countdown > 0 ? Text(countdown.toString()) : SizedBox.shrink();
+    return Text(
+      countdown.toString(),
+      style: Theme.of(context).textTheme.bodyLarge,
+    );
   }
 }
