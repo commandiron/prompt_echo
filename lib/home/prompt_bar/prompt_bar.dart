@@ -84,7 +84,7 @@ class _PromptBarState extends State<PromptBar> {
                     TextField(
                       controller: controller,
                       maxLines: 3,
-                      minLines: 1,
+                      minLines: 2,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -120,7 +120,9 @@ class _PromptBarState extends State<PromptBar> {
                 alignment: Alignment.center,
                 child:
                     MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? EchoButton(onPressed: () => search())
+                        ? Column(
+                          children: [EchoButton(onPressed: () => search())],
+                        )
                         : null,
               ),
             ],
@@ -143,23 +145,12 @@ class _PromptBarState extends State<PromptBar> {
                       padding: const EdgeInsets.all(8),
                       child: AllowPopUpButton(),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: clipboardSwitchValue,
-                          onChanged: (value) {
-                            setState(() {
-                              clipboardSwitchValue = value ?? false;
-                            });
-                          },
-                        ),
-                        Text(
-                          "Copy to clipboard when press echo.",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
+                    CopyToCliboardCheckBox(value: clipboardSwitchValue, onChanged:(value) {
+                      setState(() {
+              clipboardSwitchValue = value ?? false;
+            });
+                    },),
+
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
@@ -184,6 +175,30 @@ class _PromptBarState extends State<PromptBar> {
   }
 }
 
+class CopyToCliboardCheckBox extends StatelessWidget {
+  const CopyToCliboardCheckBox({super.key, required this.value, required this.onChanged});
+
+  final bool? value;
+  final void Function(bool? value)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox(
+          value: value,
+          onChanged: onChanged,
+        ),
+        Text(
+          "Copy to clipboard when press echo.",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
+}
+
 class AllowPopUpButton extends StatelessWidget {
   const AllowPopUpButton({super.key});
 
@@ -204,16 +219,14 @@ class AllowPopUpButton extends StatelessWidget {
                 title: Row(
                   children: [
                     Text("Allow Popup"),
-                    SizedBox(width: 4,),
-                    CountDownText()
+                    SizedBox(width: 4),
+                    CountDownText(),
                   ],
                 ),
                 content: Text(
                   "After few seconds, you will see pop-up blocker next to the address bar. Please click on and allow.",
                 ),
-                actions: [
-                  CloseButton()
-                ],
+                actions: [CloseButton()],
               ),
         );
       },
