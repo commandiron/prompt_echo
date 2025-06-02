@@ -153,7 +153,7 @@ class AllowPopUpButton extends StatelessWidget {
   const AllowPopUpButton({super.key});
 
   Future<void> openNewTabForAllowPopUp() async {
-    await Future.delayed(Duration(milliseconds: 5500));
+    await Future.delayed(Duration(milliseconds: 3000));
     HtmlHelper.openURL("${Uri.base}popup");
   }
 
@@ -170,11 +170,13 @@ class AllowPopUpButton extends StatelessWidget {
                   children: [Text("Allow Popup"), Spacer(), CloseButton()],
                 ),
                 content: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "After a few seconds, you will see the popup blocker next to the address bar. Please click and allow.",
                     ),
                     SizedBox(height: 16,),
+                    Image.asset("assets/allow_popup.png", width: 360,),
                   ],
                 ),
               ),

@@ -29,10 +29,13 @@ class MainApp extends StatelessWidget {
             "/popup":
                 (context) => Scaffold(
                   appBar: CustomAppBar(),
-                  body: Center(
+                  body: Container(
+                    padding: EdgeInsets.all(16),
+                    alignment: Alignment.center,
                     child: Text(
                       "Popup permission successful. Please close this window.",
-                      style: Theme.of(context).textTheme.displayLarge,
+                      style: Theme.of(context).textTheme.displaySmall,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
