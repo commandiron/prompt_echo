@@ -175,13 +175,6 @@ class AllowPopUpButton extends StatelessWidget {
                       "After a few seconds, you will see the popup blocker next to the address bar. Please click and allow.",
                     ),
                     SizedBox(height: 16,),
-                    Row(
-                      children: [
-                        Expanded(child: Center(child: Text("Chrome"))),
-                        Expanded(child: Center(child: Text("Safari"))),
-                        Expanded(child: Center(child: Text("Firefox"))),
-                      ],
-                    )
                   ],
                 ),
               ),
