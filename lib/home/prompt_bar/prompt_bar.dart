@@ -10,6 +10,7 @@ import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/llm_chip.dart';
 import 'package:prompt_echo/util/html_helper.dart';
 import 'package:prompt_echo/util/responsive_horizontal_row.dart';
+import 'package:universal_html/html.dart';
 
 class PromptBar extends StatefulWidget {
   const PromptBar({super.key});
@@ -19,6 +20,9 @@ class PromptBar extends StatefulWidget {
 }
 
 class _PromptBarState extends State<PromptBar> {
+  bool _isPopupTriedBefore = false;
+  bool _popupAllowed = false;
+
   final Set<Llm> llmSet = Set.from(
     Llm.items.where((e) => e.echoStatus != EchoStatus.needCopyPaste),
   );
@@ -105,15 +109,41 @@ class _PromptBarState extends State<PromptBar> {
                         SizedBox(width: 8),
                         EchoButton(onPressed: () => search()),
                         SizedBox(width: 8),
-                        AllowPopUpButton(),
+                        if (!_popupAllowed)
+                          AllowPopUpButton(
+                            isPopupTriedBefore: _isPopupTriedBefore,
+                            popupTried: () {
+                              setState(() {
+                                _isPopupTriedBefore = true;
+                              });
+                            },
+                            popupOpenedSuccessfully: () {
+                              setState(() {
+                                _popupAllowed = true;
+                              });
+                            },
+                          ),
                       ],
                     )
                     : null,
           ),
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
             EchoButton(onPressed: () => search()),
-          if (MediaQuery.of(context).size.width < compactModeBreakWidth)
-            AllowPopUpButton(),
+          if (MediaQuery.of(context).size.width < compactModeBreakWidth &&
+              !_popupAllowed)
+            AllowPopUpButton(
+              isPopupTriedBefore: _isPopupTriedBefore,
+              popupTried: () {
+                setState(() {
+                  _isPopupTriedBefore = true;
+                });
+              },
+              popupOpenedSuccessfully: () {
+                setState(() {
+                  _popupAllowed = true;
+                });
+              },
+            ),
           ResponsiveAppRow(
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +161,7 @@ class _PromptBarState extends State<PromptBar> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    "* Don't forget to allow popup before start.",
+                    "* Don't forget to allow popup before use.",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
@@ -144,20 +174,49 @@ class _PromptBarState extends State<PromptBar> {
   }
 }
 
-class AllowPopUpButton extends StatelessWidget {
-  const AllowPopUpButton({super.key});
+class AllowPopUpButton extends StatefulWidget {
+  const AllowPopUpButton({
+    super.key,
+    required this.isPopupTriedBefore,
+    required this.popupTried,
+    required this.popupOpenedSuccessfully,
+  });
 
+  final bool isPopupTriedBefore;
+  final void Function() popupTried;
+  final void Function() popupOpenedSuccessfully;
+
+  @override
+  State<AllowPopUpButton> createState() => _AllowPopUpButtonState();
+}
+
+class _AllowPopUpButtonState extends State<AllowPopUpButton> {
+  bool _isDialogOpen = false;
   Future<void> openNewTabForAllowPopUp() async {
+    if (widget.isPopupTriedBefore) {
+      return;
+    }
     await Future.delayed(Duration(milliseconds: 3000));
+    widget.popupTried();
     HtmlHelper.openURL("${Uri.base}popup");
+    window.onMessage.listen((event) {
+      if (event.data == 'popup_opened_successfully') {
+        if (_isDialogOpen && mounted) {
+          Navigator.of(context).pop();
+        }
+        widget.popupOpenedSuccessfully();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
         openNewTabForAllowPopUp();
-        showDialog(
+        if (_isDialogOpen) return;
+        _isDialogOpen = true;
+        showDialog<bool>(
           context: context,
           builder:
               (context) => AlertDialog(
@@ -175,7 +234,9 @@ class AllowPopUpButton extends StatelessWidget {
                   ],
                 ),
               ),
-        );
+        ).then((_) {
+          _isDialogOpen = false;
+        });
       },
       child: Text("Allow Popup\nBefore Use!"),
     );

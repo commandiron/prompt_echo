@@ -1,7 +1,7 @@
 import 'package:dynamic_path_url_strategy/dynamic_path_url_strategy.dart';
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/home/custom_app_bar.dart';
 import 'package:prompt_echo/home/home_screen.dart';
+import 'package:prompt_echo/popup/popup_screen.dart';
 
 import 'util/my_theme.dart';
 
@@ -26,19 +26,7 @@ class MainApp extends StatelessWidget {
           title: "Prompt Echo - All in one ai prompt bar",
           routes: {
             "/": (context) => const HomeScreen(),
-            "/popup":
-                (context) => Scaffold(
-                  appBar: CustomAppBar(),
-                  body: Container(
-                    padding: EdgeInsets.all(16),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Popup permission successful. Please close this window.",
-                      style: Theme.of(context).textTheme.displaySmall,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+            "/popup": (context) => const PopupScreen(),
           },
         );
       },
