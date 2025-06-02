@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prompt_echo/util/html_helper.dart';
+import 'package:prompt_echo/util/my_theme.dart';
 import 'package:prompt_echo/widget/blinking_widget.dart';
 import 'package:universal_html/html.dart';
 
@@ -15,7 +16,6 @@ class _PopUpButtonState extends State<PopUpButton> {
   bool _popupAllowed = false;
   bool _isDialogOpen = false;
 
-  
   Future<void> openNewTabForAllowPopUp() async {
     if (_isPopupTriedBefore) {
       return;
@@ -44,6 +44,14 @@ class _PopUpButtonState extends State<PopUpButton> {
         visible: !_popupAllowed,
         child: BlinkingWidget(
           child: FloatingActionButton.extended(
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
+            foregroundColor: Theme.of(context).colorScheme.primary,
+            extendedTextStyle: TextStyle(
+              fontWeight:
+                  themeNotifier.value == ThemeMode.light
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+            ),
             onPressed: () async {
               openNewTabForAllowPopUp();
               if (_isDialogOpen) return;
@@ -53,7 +61,11 @@ class _PopUpButtonState extends State<PopUpButton> {
                 builder:
                     (context) => AlertDialog(
                       title: Row(
-                        children: [Text("Allow Popup"), Spacer(), CloseButton()],
+                        children: [
+                          Text("Allow Popup"),
+                          Spacer(),
+                          CloseButton(),
+                        ],
                       ),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,

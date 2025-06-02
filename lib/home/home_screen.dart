@@ -14,7 +14,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    precacheImage(AssetImage("assets/allow_popup.png"), context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      precacheImage(AssetImage("assets/allow_popup.png"), context);
+    });
+
     super.initState();
   }
 

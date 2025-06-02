@@ -21,11 +21,11 @@ class _BlinkingWidgetState extends State<BlinkingWidget> with SingleTickerProvid
     // 3 saniye boyunca 3 kez yanıp sönme: Her biri 1 saniye sürecek şekilde (fadeOut + fadeIn)
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1), // her tur 1 saniye
+      duration: const Duration(milliseconds: 500), // her tur 1 saniye
     );
 
     _animation = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
     // 3 tekrar yap (total 3 saniye)

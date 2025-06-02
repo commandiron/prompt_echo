@@ -107,27 +107,15 @@ class _PromptBarState extends State<PromptBar> {
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
             EchoButton(onPressed: () => search()),
           ResponsiveAppRow(
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CopyToCliboardCheckBox(
-                  value: clipboardSwitchValue,
-                  onChanged: (value) {
-                    setState(() {
-                      clipboardSwitchValue = value ?? false;
-                    });
-                  },
-                  message:
-                      "Claude, Gemini, and DeepSeek are not supported queries. You can simply paste & enter your prompt.",
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    "* Don't forget to allow popup before use.",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ],
+            content: CopyToCliboardCheckBox(
+              value: clipboardSwitchValue,
+              onChanged: (value) {
+                setState(() {
+                  clipboardSwitchValue = value ?? false;
+                });
+              },
+              message:
+                  "Claude, Gemini, and DeepSeek are not supported queries. You can simply paste & enter your prompt.",
             ),
           ),
         ],
