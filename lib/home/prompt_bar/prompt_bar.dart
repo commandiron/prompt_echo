@@ -84,7 +84,7 @@ class _PromptBarState extends State<PromptBar> {
                     TextField(
                       controller: controller,
                       maxLines: 3,
-                      minLines: 2,
+                      minLines: 1,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -120,9 +120,7 @@ class _PromptBarState extends State<PromptBar> {
                 alignment: Alignment.center,
                 child:
                     MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? Column(
-                          children: [EchoButton(onPressed: () => search())],
-                        )
+                        ? EchoButton(onPressed: () => search())
                         : null,
               ),
             ],
@@ -145,12 +143,14 @@ class _PromptBarState extends State<PromptBar> {
                       padding: const EdgeInsets.all(8),
                       child: AllowPopUpButton(),
                     ),
-                    CopyToCliboardCheckBox(value: clipboardSwitchValue, onChanged:(value) {
-                      setState(() {
-              clipboardSwitchValue = value ?? false;
-            });
-                    },),
-
+                    CopyToCliboardCheckBox(
+                      value: clipboardSwitchValue,
+                      onChanged: (value) {
+                        setState(() {
+                          clipboardSwitchValue = value ?? false;
+                        });
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
@@ -176,7 +176,11 @@ class _PromptBarState extends State<PromptBar> {
 }
 
 class CopyToCliboardCheckBox extends StatelessWidget {
-  const CopyToCliboardCheckBox({super.key, required this.value, required this.onChanged});
+  const CopyToCliboardCheckBox({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
   final bool? value;
   final void Function(bool? value)? onChanged;
@@ -186,10 +190,7 @@ class CopyToCliboardCheckBox extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Checkbox(
-          value: value,
-          onChanged: onChanged,
-        ),
+        Checkbox(value: value, onChanged: onChanged),
         Text(
           "Copy to clipboard when press echo.",
           style: Theme.of(context).textTheme.bodySmall,
