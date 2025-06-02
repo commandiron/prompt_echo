@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/home/home.dart';
+import 'package:prompt_echo/home/home_screen.dart';
 
 import 'util/my_theme.dart';
 
@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
           darkTheme: MyTheme.darkTheme,
           themeMode: currentMode,
           title: "Prompt Echo - All in one ai prompt bar",
-          home: const Home(),
+          home: const HomeScreen(),
         );
       },
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prompt_echo/util/constants.dart';
 
-class ResponsiveHorizontalLayout extends StatelessWidget {
-  const ResponsiveHorizontalLayout({
+class ResponsiveAppRow extends StatelessWidget {
+  const ResponsiveAppRow({
     super.key,
     this.leadingWidget,
     required this.content,

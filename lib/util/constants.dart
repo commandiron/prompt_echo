@@ -1,1 +1,1 @@
-const int compactModeBreakWidth = 600;
+const int compactModeBreakWidth = 960;

@@ -8,7 +8,7 @@ import 'package:prompt_echo/data/llm.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/llm_chip.dart';
 import 'package:prompt_echo/util/html_helper.dart';
-import 'package:prompt_echo/util/responsive_horizontal_layout.dart';
+import 'package:prompt_echo/util/responsive_horizontal_row.dart';
 
 class PromptBar extends StatefulWidget {
   const PromptBar({super.key});
@@ -18,10 +18,11 @@ class PromptBar extends StatefulWidget {
 }
 
 class _PromptBarState extends State<PromptBar> {
-  final TextEditingController controller = TextEditingController();
-  final Set<Llm> searchSet = Set.from(
+  final Set<Llm> llmSet = Set.from(
     Llm.items.where((e) => e.echoStatus != EchoStatus.needCopyPaste),
   );
+
+  final TextEditingController controller = TextEditingController();
 
   bool clipboardSwitchValue = true;
 
@@ -30,16 +31,16 @@ class _PromptBarState extends State<PromptBar> {
       Clipboard.setData(ClipboardData(text: controller.text));
     }
 
-    final sortedSearchList = sortSearchList();
-    if (sortedSearchList.isEmpty) return;
+    final sortedLlmList = getSortedLlmList();
+    if (sortedLlmList.isEmpty) return;
 
-    for (var llm in sortedSearchList) {
+    for (var llm in sortedLlmList) {
       HtmlHelper.openURL(llm.url + controller.text);
     }
   }
 
-  List<Llm> sortSearchList() {
-    return searchSet.toList()..sort((a, b) => a.index.compareTo(b.index));
+  List<Llm> getSortedLlmList() {
+    return llmSet.toList()..sort((a, b) => a.index.compareTo(b.index));
   }
 
   @override
@@ -57,68 +58,52 @@ class _PromptBarState extends State<PromptBar> {
                   llm: llm,
                   onPressed: (isActive) {
                     if (isActive) {
-                      searchSet.add(llm);
+                      llmSet.add(llm);
                     }
                     if (!isActive) {
-                      searchSet.remove(llm);
+                      llmSet.remove(llm);
                     }
-
                     setState(() {});
                   },
                 );
               }),
             ),
           ),
-          ResponsiveHorizontalLayout(
-            content: Column(
-              children: [
-                TextField(
-                  controller: controller,
-                  maxLines: 3,
-                  minLines: 1,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    hintText:
-                        searchSet.isNotEmpty
-                            ? "Prompt to ${sortSearchList().map((e) => e.name).toList()}"
-                            : "Prompt yourself :)",
-                    hintStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+          ResponsiveAppRow(
+            content: TextField(
+              controller: controller,
+              maxLines: 3,
+              minLines: 1,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  onSubmitted: (value) => search(),
-                  onEditingComplete: () => search(),
                 ),
-              ],
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+                hintText:
+                    llmSet.isNotEmpty
+                        ? "Prompt to ${getSortedLlmList().map((e) => e.name).toList()}"
+                        : "Prompt yourself :)",
+                hintStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              onSubmitted: (value) => search(),
+              onEditingComplete: () => search(),
             ),
             trailingWidget:
                 MediaQuery.of(context).size.width > compactModeBreakWidth
-                    ? Row(
-                      children: [
-                        SizedBox(width: 8),
-                        EchoButton(onPressed: () => search()),
-                        SizedBox(width: 8),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text("Allow Popup"),
-                        ),
-                      ],
-                    )
+                    ? _buildEchoButtonWithAllowPopupButton()
                     : null,
           ),
-
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
-            EchoButton(onPressed: () => search()),
-          ResponsiveHorizontalLayout(
+            _buildEchoButtonWithAllowPopupButton(),
+          ResponsiveAppRow(
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -150,6 +135,21 @@ class _PromptBarState extends State<PromptBar> {
         ],
       ),
     );
+  }
+
+  Widget _buildEchoButtonWithAllowPopupButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 8),
+                        EchoButton(onPressed: () => search()),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text("Allow Popup"),
+                        ),
+                      ],
+                    );
   }
 }
 
