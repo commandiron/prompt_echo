@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/html_helper.dart';
+import 'package:prompt_echo/util/html_helper.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});

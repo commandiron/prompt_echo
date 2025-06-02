@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/my_theme.dart';
+import 'package:prompt_echo/util/my_theme.dart';
 
 import '../../../data/llm.dart';
 

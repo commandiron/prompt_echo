@@ -47,6 +47,10 @@ class MyTheme {
       backgroundColor: onSurfaceDark,
       foregroundColor: surfaceDark,
       extendedTextStyle: TextStyle(fontWeight: FontWeight.bold),
+      extendedSizeConstraints: BoxConstraints(minHeight: 47),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
     ),
     iconTheme: const IconThemeData(color: primaryDark),
     checkboxTheme: CheckboxThemeData(

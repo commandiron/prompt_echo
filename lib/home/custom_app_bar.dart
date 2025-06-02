@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prompt_echo/constants.dart';
-import 'package:prompt_echo/my_theme.dart';
+import 'package:prompt_echo/util/constants.dart';
+import 'package:prompt_echo/util/my_theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({

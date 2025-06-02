@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:prompt_echo/constants.dart';
+import 'package:prompt_echo/util/constants.dart';
 import 'package:prompt_echo/data/llm.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/echo_button.dart';
 import 'package:prompt_echo/home/prompt_bar/widget/llm_chip.dart';
-import 'package:prompt_echo/html_helper.dart';
+import 'package:prompt_echo/util/html_helper.dart';
+import 'package:prompt_echo/util/responsive_horizontal_layout.dart';
 
 class PromptBar extends StatefulWidget {
   const PromptBar({super.key});
@@ -44,7 +45,7 @@ class _PromptBarState extends State<PromptBar> {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 800),
+      constraints: BoxConstraints(maxWidth: 1200),
       child: SeparatedColumn(
         separatorBuilder: () => SizedBox(height: 16),
         children: [
@@ -68,106 +69,83 @@ class _PromptBarState extends State<PromptBar> {
               }),
             ),
           ),
-          Flex(
-            direction: Axis.horizontal,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width:
-                    MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? 100
-                        : 32,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: controller,
-                      maxLines: 3,
-                      minLines: 1,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                        hintText:
-                            searchSet.isNotEmpty
-                                ? "Prompt to ${sortSearchList().map((e) => e.name).toList()}"
-                                : "Prompt yourself :)",
-                        hintStyle: Theme.of(
-                          context,
-                        ).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+          ResponsiveHorizontalLayout(
+            content: Column(
+              children: [
+                TextField(
+                  controller: controller,
+                  maxLines: 3,
+                  minLines: 1,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                      onSubmitted: (value) => search(),
-                      onEditingComplete: () => search(),
                     ),
-                  ],
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                    hintText:
+                        searchSet.isNotEmpty
+                            ? "Prompt to ${sortSearchList().map((e) => e.name).toList()}"
+                            : "Prompt yourself :)",
+                    hintStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  onSubmitted: (value) => search(),
+                  onEditingComplete: () => search(),
                 ),
-              ),
-              Container(
-                width:
-                    MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? 100
-                        : 32,
-                alignment: Alignment.center,
-                child:
-                    MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? EchoButton(onPressed: () => search())
-                        : null,
-              ),
-            ],
+              ],
+            ),
+            trailingWidget:
+                MediaQuery.of(context).size.width > compactModeBreakWidth
+                    ? Row(
+                      children: [
+                        SizedBox(width: 8),
+                        EchoButton(onPressed: () => search()),
+                        SizedBox(width: 8),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text("Allow Popup"),
+                        ),
+                      ],
+                    )
+                    : null,
           ),
+
           if (MediaQuery.of(context).size.width < compactModeBreakWidth)
             EchoButton(onPressed: () => search()),
-          Row(
-            children: [
-              SizedBox(
-                width:
-                    MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? 100
-                        : 32,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: AllowPopUpButton(),
-                    ),
-                    CopyToCliboardCheckBox(
-                      value: clipboardSwitchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          clipboardSwitchValue = value ?? false;
-                        });
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(
-                        "* Claude, Gemini, and DeepSeek are not supported queries. You can simply paste your prompt using 'Copy to clipboard when echo' and press enter.",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                  ],
+          ResponsiveHorizontalLayout(
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CopyToCliboardCheckBox(
+                  value: clipboardSwitchValue,
+                  onChanged: (value) {
+                    setState(() {
+                      clipboardSwitchValue = value ?? false;
+                    });
+                  },
                 ),
-              ),
-              SizedBox(
-                width:
-                    MediaQuery.of(context).size.width > compactModeBreakWidth
-                        ? 100
-                        : 32,
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    "* Claude, Gemini, and DeepSeek are not supported queries. You can simply paste your prompt using 'Copy to clipboard when echo' and press enter.",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    "* Don't forget to allow popup before start.",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
