@@ -5,22 +5,25 @@ class CopyToCliboardCheckBox extends StatelessWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.message,
   });
 
   final bool? value;
   final void Function(bool? value)? onChanged;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Checkbox(value: value, onChanged: onChanged),
-        Text(
-          "Copy to clipboard when press echo.",
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
-    );
+    return (RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.bodySmall,
+        children: [
+          WidgetSpan(alignment: PlaceholderAlignment.middle,child: Checkbox(value: value, onChanged: onChanged)),
+          TextSpan(text: "Copy to clipboard when press echo."),
+          if(message != null)
+            TextSpan(text: " ($message)")
+        ],
+      ),
+    ));
   }
 }

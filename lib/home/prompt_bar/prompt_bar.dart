@@ -125,13 +125,8 @@ class _PromptBarState extends State<PromptBar> {
                       clipboardSwitchValue = value ?? false;
                     });
                   },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    "* Claude, Gemini, and DeepSeek are not supported queries. You can simply paste your prompt using 'Copy to clipboard when echo' and press enter.",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                  message:
+                      "Claude, Gemini, and DeepSeek are not supported queries. You can simply paste & enter your prompt.",
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -175,14 +170,14 @@ class AllowPopUpButton extends StatelessWidget {
                     Text(
                       "After a few seconds, you will see the popup blocker next to the address bar. Please click and allow.",
                     ),
-                    SizedBox(height: 16,),
-                    Image.asset("assets/allow_popup.png", width: 360,),
+                    SizedBox(height: 16),
+                    Image.asset("assets/allow_popup.png", width: 360),
                   ],
                 ),
               ),
         );
       },
-      child: Text("Allow Popup"),
+      child: Text("Allow Popup\nBefore Use!"),
     );
   }
 }
