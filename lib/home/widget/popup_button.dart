@@ -12,18 +12,11 @@ class PopUpButton extends StatefulWidget {
 }
 
 class _PopUpButtonState extends State<PopUpButton> {
-  bool _isPopupTriedBefore = false;
   bool _popupAllowed = false;
   bool _isDialogOpen = false;
 
   Future<void> openNewTabForAllowPopUp() async {
-    if (_isPopupTriedBefore) {
-      return;
-    }
     await Future.delayed(Duration(milliseconds: HtmlHelper.getBrowserType() == BrowserType.safari ? 3000 : 5000));
-    setState(() {
-      _isPopupTriedBefore = true;
-    });
     HtmlHelper.openURL("${Uri.base}popup");
     window.onMessage.listen((event) {
       if (event.data == 'popup_opened_successfully') {
