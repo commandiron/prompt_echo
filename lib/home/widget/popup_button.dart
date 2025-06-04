@@ -20,7 +20,7 @@ class _PopUpButtonState extends State<PopUpButton> {
     if (_isPopupTriedBefore) {
       return;
     }
-    await Future.delayed(Duration(milliseconds: 3000));
+    await Future.delayed(Duration(milliseconds: HtmlHelper.getBrowserType() == BrowserType.safari ? 3000 : 5000));
     setState(() {
       _isPopupTriedBefore = true;
     });
